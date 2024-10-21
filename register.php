@@ -82,7 +82,7 @@ class user {
              }
  
              // Insert user data into the database
-             $insertQuery = "INSERT INTO `user_form` (name, email, password) VALUES ('$name', '$email', '$password')";
+             $insertQuery = "INSERT INTO `user_form` (name, email, password, role) VALUES ('$name', '$email', '$password', 'user')";
              $insert = mysqli_query($this->conn, $insertQuery);
  
              if ($insert) {

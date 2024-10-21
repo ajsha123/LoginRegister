@@ -36,7 +36,7 @@ class User {
    public function login($email, $password) {
        $email = mysqli_real_escape_string($this->conn, $email);
        $passwordHash = md5($password);
-       echo "Hashed Password: " . $passwordHash . "<br>";
+    //    echo "Hashed Password: " . $passwordHash . "<br>";
       //  $passwordHash = mysqli_real_escape_string($this->conn, md5($password)); // Encrypt the password
 
        // Query the database to find the user with the provided email and password
@@ -45,13 +45,28 @@ class User {
 
        if (mysqli_num_rows($result) > 0) {
            $row = mysqli_fetch_assoc($result);
+           //Redirect based on user 
            $_SESSION['user_id'] = $row['id']; // Set the session with the user ID
-           header('location:home.php'); // Redirect to the home page after login
+           $_SESSION['name'] = $row['name']; // Set the session with the user ID
+           $_SESSION['role'] = $row['role'];  // Set the session with the user role
+
+           // Redirect based on user role
+           if ($row['role'] == 'admin') {
+               header('location:admin.php');
+               exit;
+               
+           } elseif ($row['role'] == 'user') {
+               header('location:student.php');
+               exit;
+           } else {
+               return 'Invalid user role!';
+           }
        } else {
            return 'Incorrect email or password!';
        }
    }
 }
+
 
 // Handle form submission
 if (isset($_POST['submit'])) {
@@ -63,7 +78,6 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
